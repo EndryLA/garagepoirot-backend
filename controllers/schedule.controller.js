@@ -23,8 +23,13 @@ export const getSchedule = async (req,res) => {
         database.query(query,[day], (error, result) => {
             if (error) {
                 res.status(400).json({message : error.message})
+            } 
+            if (result.length === 0) {
+                res.status(404).json({message: "Auncun horaire pour le jour demandé"})
             }
-            res.status(200).send(result)
+            else {
+                res.status(200).send(result)
+            }
         })
     } catch (error) {
         res.status(500).json({message : error.message})

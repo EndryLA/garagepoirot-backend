@@ -7,14 +7,13 @@ import userRouter from './routes/user.js'
 import imagesRouter from './routes/image.js'
 import carsRouter from './routes/car.js'
 import multer from 'multer'
+import helmet from 'helmet';
 
 dotenv.config()
 const app = express();
 
 app.use(express.json())
-
-const storage = multer.memoryStorage();
-const upload = multer({storage: storage})
+app.use(helmet())
 
 
 app.use('/api/services',servicesRouter)

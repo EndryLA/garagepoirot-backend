@@ -46,8 +46,8 @@ export const createCar = async (req, res) => {
     try {
         const { price, circulationYear, model, fuel, gearbox, kilometers } = req.body;
         const { originalname, buffer } = req.file;
-
         const imageQuery = "INSERT INTO image (filename, imageData) VALUES (?, ?)";
+
         database.query(imageQuery, [originalname, buffer], (imageError, imageResult) => {
             if (imageError) {
                 return res.status(400).json({ message: imageError.message });
@@ -58,13 +58,15 @@ export const createCar = async (req, res) => {
             const carQuery = "INSERT INTO car (price, circulationYear, model, fuel, gearbox, kilometers, imageId) VALUES (?, ?, ?, ?, ?, ?, ?)";
             database.query(carQuery, [price, circulationYear, model, fuel, gearbox, kilometers, imageId], (carError, carResult) => {
                 if (carError) {
-                    return res.status(400).json({ message: carError.message });
+                    return res.status(400).json({ message: "Database Error : " + carError});
+                } else {
+                    res.status(201).json({
+                        message: 'La voiture a été créée avec succès',
+                        carUrl: `/api/cars/${carResult.insertId}`,
+                    });
                 }
 
-                res.status(201).json({
-                    message: 'La voiture a été créée avec succès',
-                    carUrl: `/api/cars/${carResult.insertId}`,
-                });
+                
             });
         });
     } catch (error) {

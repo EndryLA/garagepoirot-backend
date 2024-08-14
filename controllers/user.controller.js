@@ -10,7 +10,7 @@ export const getUsers = async (req,res) => {
         if (error) {
             res.status(400).json({message: error.message})
         } if (results.length === 0) {
-            res.status(200).json({message: "Il n'y pas d'utilisateurs enregistré"})
+            res.status(200).json({message: "Il n'y pas d'utilisateurs enregistrés"})
         } else {
             res.status(200).send(results)
         }
@@ -49,10 +49,9 @@ export const createUser = async (req,res) => {
             if (error) {
                 res.status(400).json({message: error.message})
             } else {
-                const newUserId = result.insertId
                 res.status(201).json({
                     "message": "Le nouvel utilisitauer a bien été enregistré",
-                    "newUserUrl": `/api/users/${newUserId}`
+                    "newUserUrl": `/api/users/${result.insertId}`
                 })
             }
         })

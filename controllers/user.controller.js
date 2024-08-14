@@ -1,5 +1,9 @@
 import database from "../database/connect.js";
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 
 export const getUsers = async (req,res) => {
@@ -43,18 +47,33 @@ export const createUser = async (req,res) => {
     try {
         const {firstname, lastname, username, password, roleId} = req.body
         const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password,saltRounds)
-        const query = 'INSERT INTO user(firstname,lastname,username,password,roleId) VALUES (?,?,?,?,?)'
-        database.query(query, [firstname, lastname, username, hashedPassword, roleId], (error,result) => {
-            if (error) {
-                res.status(400).json({message: error.message})
-            } else {
-                res.status(201).json({
-                    "message": "Le nouvel utilisitauer a bien été enregistré",
-                    "newUserUrl": `/api/users/${result.insertId}`
-                })
+        console.log(req.body)
+        const checkUserQuery = "SELECT * FROM user WHERE username = ?"
+
+        database.query(checkUserQuery, [username], async (errors, result) => {
+            if (errors) {
+                return res.status(400).json({message : errors.message})
             }
+            if (result.length > 0) {
+                console.log(result)
+                return res.status(409).json({message : "Cette adresse mail est déjà utilisée"})
+            }
+            const hashedPassword = await bcrypt.hash(password,saltRounds)
+
+            const query = 'INSERT INTO user (firstname,lastname,username,password,roleId) VALUES (?,?,?,?,?)'
+            database.query(query, [firstname, lastname, username, hashedPassword, roleId], (error,result) => {
+                if (error) {
+                    return res.status(400).json({message: error.message})
+                } else {
+                    return res.status(201).json({
+                        "message": "Le nouvel utilisitauer a bien été enregistré",
+                        "newUserUrl": `/api/users/${result.insertId}`
+                    })
+                }
+            })
         })
+
+        
     } catch (error) {
         res.status(500).json({message: error.message})
     }
@@ -99,4 +118,39 @@ export const deleteUser = async (req,res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+export const loginUser = async (req,res) => {
+    const {username, password} = req.body
+    const checkMailQuery = "SELECT * FROM user WHERE username = ?"
+
+    database.query(checkMailQuery,[username], async (error,result) => {
+        console.log(result)
+
+        if (error) {
+            res.status(500).json({message: error.message})
+        }
+
+        if (result.length === 0) {
+            return res.status(400).json({message: "Adresse mail ou mot de passe invalide"})
+        }
+        const user = result[0]
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordValid) {
+            res.status(400).json({message: "Adresse mail ou mot de passe invalide"})
+        }
+
+        const token = jwt.sign(
+            {id:user.id, username: user.username, role: user.roleId},
+            process.env.JWT_SECRET_KEY,
+            {expiresIn: '24h'}
+        )
+        
+        res.status(200).json({token})
+    })
+}
+
+
+
 export default getUsers

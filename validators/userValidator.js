@@ -14,7 +14,9 @@ export const validateUser = () => [
     .matches(/[A-Z]/)
     .withMessage('Le mot de passe doit contenir au moins une lettre majuscule')
     .matches(/[!@#$%^&*(),.?":{}|<>]/)
-    .withMessage("Le mot de passe doit contenir au moins un chractère spécial"),
+    .withMessage("Le mot de passe doit contenir au moins un chractère spécial")
+    .matches(/\d/)
+    .withMessage('Le mot de passe doit contenir au moins un chiffre'),
 
     body('firstname')
     .trim()

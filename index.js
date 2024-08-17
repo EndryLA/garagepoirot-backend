@@ -31,3 +31,5 @@ app.use('/api/cars',carsRouter)
 app.use('/api/mail',mailerRouter)
 
 app.listen(3000,() => {console.log('connected to the express server')})
+
+export default app

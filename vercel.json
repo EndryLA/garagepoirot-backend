@@ -1,12 +1,12 @@
 {
   "version": 2,
-   "name": "arcadia-ecf-backend",
+   "name": "garage-poirot-backend",
    "builds": [
       { "src": "/api/index.js", "use": "@vercel/node" }
    ],
    "routes": [
       { "src": "/(.*)", "dest": "/api/index.js" ,
-       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+       "methods": ["GET", "POST", "PUT", "DELETE"],
        "headers": {
          "Access-Control-Allow-Origin": "*",
          "Access-Control-Allow-Credentials":"true"

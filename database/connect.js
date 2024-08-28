@@ -11,7 +11,7 @@ const database = mysql.createConnection({
     port: process.env.DB_PORT,
     ssl: {
         rejectUnauthorized: true,
-        ca: fs.readFileSync('./config/ca.pem')
+        ca: process.env.DB_CERTIFICATE
 
     }
 })

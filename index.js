@@ -41,4 +41,14 @@ app.use('/api/mail',mailerRouter)
 
 app.listen(3000,() => {console.log('connected to the express server')})
 
-export default app
+export default (req, res) => {
+    return new Promise((resolve, reject) => {
+        app(req, res, (err) => {
+            if (err) reject(err);
+            else resolve();
+        });
+    });
+};
+
+
+

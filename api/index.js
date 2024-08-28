@@ -1,13 +1,12 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import servicesRouter from './routes/service.js'
-import commentsRouter from './routes/comment.js'
-import schedulesRouter from './routes/schedule.js'
-import userRouter from './routes/user.js'
-import imagesRouter from './routes/image.js'
-import carsRouter from './routes/car.js'
-import helmet from 'helmet';
-import mailerRouter from './routes/mailer.js'
+import servicesRouter from '../routes/service.js'
+import commentsRouter from '../routes/comment.js'
+import schedulesRouter from '../routes/schedule.js'
+import userRouter from '../routes/user.js'
+import imagesRouter from '../routes/image.js'
+import carsRouter from '../routes/car.js'
+import mailerRouter from '../routes/mailer.js'
 import cors from 'cors'
 
 dotenv.config()
@@ -39,6 +38,13 @@ app.use('/api/images',imagesRouter)
 app.use('/api/cars',carsRouter)
 app.use('/api/mail',mailerRouter)
 
-app.listen(3000,() => {console.log('connected to the express server')})
 
-export default app
+export default (req, res) => {
+    return new Promise((resolve, reject) => {
+        app(req, res, (err) => {
+            if (err) reject(err);
+            else resolve();
+        });
+    });
+};
+

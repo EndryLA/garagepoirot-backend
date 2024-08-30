@@ -127,7 +127,7 @@ export const loginUser = async (req,res) => {
         console.log(result)
 
         if (error) {
-            res.status(500).json({message: error.message})
+            return res.status(500).json({message: error.message})
         }
 
         if (result.length === 0) {
@@ -138,7 +138,7 @@ export const loginUser = async (req,res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
         if (!isPasswordValid) {
-            res.status(400).json({message: "Adresse mail ou mot de passe invalide"})
+            return res.status(400).json({message: "Adresse mail ou mot de passe invalide"})
         }
 
         const token = jwt.sign(
@@ -146,8 +146,7 @@ export const loginUser = async (req,res) => {
             process.env.JWT_SECRET_KEY,
             {expiresIn: '24h'}
         )
-        
-        res.status(200).json({token})
+        return res.status(200).json({token})
     })
 }
 

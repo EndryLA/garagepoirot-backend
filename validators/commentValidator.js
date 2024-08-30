@@ -14,7 +14,6 @@ export const validateComment = () => [
 
     body('comment')
     .trim()
-    .escape()
     .notEmpty()
     .isLength({min:10})
     .withMessage('Le commentaire doit faire au moins 10 charactères')
@@ -28,6 +27,7 @@ export const validationHandler = async (req,res,next) => {
     if(!errors.isEmpty()) {
         res.status(400).json({errors : errors.array()})
     }
+    next()
 }
 
 export default validateComment

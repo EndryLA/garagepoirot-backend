@@ -35,12 +35,27 @@ export const validateUser = () => [
 
 ]
 
+export const validateLogin = () => [
+    body('username')
+    .trim()
+    .escape()
+    .isEmail().withMessage('Veuillez saisir une adresse mail valide')
+    .normalizeEmail(),
+
+    body('passowrd')
+    .trim()
+    .escape()
+    
+    
+]
+
 export const validationHandler = async (req,res,next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({errors : errors.array()})
+    } else {
+        next()
     }
-    next()
 }
 
 export default validateUser

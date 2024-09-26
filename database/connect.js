@@ -1,6 +1,5 @@
 import mysql from 'mysql2'
 import dotenv from 'dotenv'
-import fs from 'fs'
 dotenv.config()
 
 const database = mysql.createConnection({
@@ -25,3 +24,6 @@ database.connect((error) => {
 })
 
 export default database
+
+
+

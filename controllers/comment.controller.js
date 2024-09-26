@@ -42,17 +42,15 @@ export const createComment = async (req,res) => {
         const query = 'INSERT INTO `comment`(name, note, comment) VALUES (?,?,?)'
         database.query(query, [name,note,comment], (error,results) => {
             if (error) {
-                res.status(400).json({message : error.message})
+                return res.status(400).json({message : error.message})
             } else {
-                const newCommentId = results.insertId
-                res.status(201).json({
+                return res.status(201).json({
                     "message":"Le commentaire a bien été enregistré",
-                    "serviceUrl":`/api/comments/${newCommentId}`
                 })
             }
         })
     } catch (error) {
-        res.status(500).json({message : error.message})
+        return res.status(500).json({message : error.message})
     }
 }
 

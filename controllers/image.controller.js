@@ -14,7 +14,8 @@ export const uploadImage = async (req, res) => {
             
             res.status(201).json({
                 message: "L'image a bien été enregistrée",
-                imageUrl: `/api/images/download/${result.insertId}`
+                imageUrl: `/api/images/download/${result.insertId}`,
+                imageId: `${result.insertId}`
             });
         });
     } catch (error) {

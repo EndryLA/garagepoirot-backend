@@ -6,7 +6,6 @@ import schedulesRouter from './routes/schedule.js'
 import userRouter from './routes/user.js'
 import imagesRouter from './routes/image.js'
 import carsRouter from './routes/car.js'
-import helmet from 'helmet';
 import mailerRouter from './routes/mailer.js'
 import cors from 'cors'
 
@@ -28,7 +27,6 @@ app.use(cors({
     credentials: true,
     optionSuccessStatus: 200,
 }));
-
 
 
 app.use('/api/services',servicesRouter)

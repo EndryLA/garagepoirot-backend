@@ -14,20 +14,40 @@ const app = express();
 
 app.use(express.json())
 
-app.use(function (req, res, next) {
+app.use(express.json());
+
+const allowedOrigins = [
+    'https://garagepoirot.vercel.app/',
+    'http://localhost:4200/'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+    allowedHeaders: 'Origin, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+}));
+
+/* app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Headers',"Origin, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version");
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     next()
-});
-
+}); */
+/* 
 app.use(cors({
     origin: '*',
     credentials: true,
     optionSuccessStatus: 200,
 }));
-
+ */
 
 
 app.use('/api/services',servicesRouter)
